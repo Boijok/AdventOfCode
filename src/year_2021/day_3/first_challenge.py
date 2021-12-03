@@ -6,17 +6,35 @@ from src.year_2021.day_3.input_values import input_list
 
 
 def solve_day_3_first_challenge() -> None:
-    total_number_of_values = len(input_list)
-    half_value = math.floor(total_number_of_values / 2)
-    matrix_input_values = transform_input_list_to_matrix(input_list)
-    array_matrix_input_values = transform_matrix_to_numpy_array(matrix_input_values)
-    sum_array = count_number_of_ones_per_column(array_matrix_input_values)
-    binary_gamma_rate = compute_binary_gamma_rate(sum_array, half_value)
-    binary_epsilon_rate = compute_binary_epsilon_rate(sum_array, half_value)
-    gamma_rate = binary_to_integer(binary_gamma_rate)
-    epsilon_rate = binary_to_integer(binary_epsilon_rate)
+    epsilon_rate = compute_epsilon_rate(input_list)
+    gamma_rate = compute_gama_rate(input_list)
     power_consumption = compute_power_consumption(gamma_rate, epsilon_rate)
     print(f"solve_day_3_first_challenge solution is {power_consumption}")
+
+
+def compute_gama_rate(input_list_values: List[str]) -> int:
+    sum_array = compute_sum_array(input_list_values)
+    half_value = find_half_value(input_list_values)
+    binary_gamma_rate = compute_binary_gamma_rate(sum_array, half_value)
+    return binary_to_integer(binary_gamma_rate)
+
+
+def compute_epsilon_rate(input_list_values: List[str]) -> int:
+    sum_array = compute_sum_array(input_list_values)
+    half_value = find_half_value(input_list_values)
+    binary_epsilon_rate = compute_binary_epsilon_rate(sum_array, half_value)
+    return binary_to_integer(binary_epsilon_rate)
+
+
+def compute_sum_array(input_list_values: List[str]) -> ndarray[Any, Any]:
+    matrix_input_values = transform_input_list_to_matrix(input_list_values)
+    array_matrix_input_values = transform_matrix_to_numpy_array(matrix_input_values)
+    return count_number_of_ones_per_column(array_matrix_input_values)
+
+
+def find_half_value(input_int_list: List[str]) -> int:
+    total_number_of_values = len(input_int_list)
+    return math.floor(total_number_of_values / 2)
 
 
 def transform_input_list_to_matrix(input_list_values: List[str]) -> List[List[int]]:
