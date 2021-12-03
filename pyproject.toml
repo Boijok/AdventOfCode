@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "AdventOfCode"
+version = "0.0.1"
+description = "AdventOfCode personal solutions"
+authors = ["Paul PRINCE <paul.prince.19@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "~3.8.10"
+typing-extensions = "^3.7.4"
+pydantic = "^1.8.1"
+pandas = "^1.2.4"
+coverage = "^5.5"
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+pre-commit = "^2.11.0"
+pytest = "^6.2.2"
+flake8 = {version = "^3.8.4"}
+python-dotenv = "^0.17.1"
+mypy = "0.902"
+
+[tool.pytest.ini_options]
+markers = [
+    "snowflake: marks tests using calls to snowflake, running only with --with-snowflake CLI option.",
+]
+filterwarnings = [
+    "ignore:A private pytest class or function was used.:DeprecationWarning"
+]
+
+[tool.mypy]
+disallow_untyped_defs = true
+plugins = "pydantic.mypy"
+
+[[tool.mypy.overrides]]
+module = [
+    "pandas.*"
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
