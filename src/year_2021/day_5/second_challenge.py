@@ -34,10 +34,31 @@ class Line(BaseModel):
         else:
             return range(self.end.y, self.origin.y + 1)
 
+    def diagonal_ranges(self) -> Tuple[range, range]:
+        if self.origin.y < self.end.y and self.origin.x < self.end.x:
+            return range(self.origin.y, self.end.y + 1), range(
+                self.origin.x, self.end.x + 1
+            )
+        elif self.origin.y > self.end.y and self.origin.x > self.end.x:
+            return range(self.end.y, self.origin.y + 1), range(
+                self.end.x, self.origin.x + 1
+            )
+        elif self.origin.y < self.end.y and self.origin.x > self.end.x:
+            return range(self.origin.y, self.end.y + 1), range(
+                self.origin.x, self.end.x - 1, -1
+            )
+        elif self.origin.y > self.end.y and self.origin.x < self.end.x:
+            return range(self.origin.y, self.end.y - 1, -1), range(
+                self.origin.x, self.end.x + 1
+            )
+        else:
+            print("Warning, should not be here")
+            return range(0), range(0)
+
 
 def solve_day_5_second_challenge() -> None:
     input_lines = convert_input_values_to_list_of_lines(input_values)
-    filtered_lines = keep_only_vertical_and_horizontal_lines(input_lines)
+    filtered_lines = keep_only_vertical_horizontal_and_diagonal_lines(input_lines)
     grid = create_grid(filtered_lines)
     completed_grid = fill_grid(filtered_lines, grid)
     number_of_points_to_avoid = count_points_to_avoid(completed_grid)
@@ -53,8 +74,14 @@ def convert_input_values_to_list_of_lines(
     ]
 
 
-def keep_only_vertical_and_horizontal_lines(input_lines: List[Line]) -> List[Line]:
-    return [line for line in input_lines if line.is_horizontal() or line.is_vertical()]
+def keep_only_vertical_horizontal_and_diagonal_lines(
+    input_lines: List[Line],
+) -> List[Line]:
+    return [
+        line
+        for line in input_lines
+        if line.is_horizontal() or line.is_vertical() or line.is_diagonal()
+    ]
 
 
 def create_grid(input_lines: List[Line]) -> Any:
@@ -87,6 +114,10 @@ def fill_grid(input_lines: List[Line], grid: Any) -> Any:
         if line.is_vertical():
             for point in line.horizontal_range():
                 grid[line.origin.x, point] = grid[line.origin.x, point] + 1
+        if line.is_diagonal():
+            y_range, x_range = line.diagonal_ranges()
+            for x_coordinate, y_coordinate in zip(x_range, y_range):
+                grid[x_coordinate, y_coordinate] = grid[x_coordinate, y_coordinate] + 1
     return grid
 
 
