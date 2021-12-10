@@ -1,3 +1,6 @@
 [flake8]
 max-line-length = 90
 ignore = E203, W503
+
+per-file-ignores =
+    src/year_2021/day_10/input_values.py:E501
