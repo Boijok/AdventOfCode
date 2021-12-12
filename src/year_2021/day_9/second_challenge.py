@@ -55,6 +55,7 @@ def get_direction_from_neighbors(neighbors: Dict[str, int], point_value: int) ->
 
 def pretty_print(matrix: List[List[Any]]) -> None:
     print("\n".join(["\t".join([str(cell) for cell in row]) for row in matrix]))
+    print("\n")
 
 
 def compute_basins_size(
